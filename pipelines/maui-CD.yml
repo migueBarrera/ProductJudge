@@ -23,6 +23,7 @@ pool:
 
 variables:
   - group: androidsecrets
+  - group: dotnet-versions
   - name: csproj
     value: 'src/ProductJudge.Mobile/ProductJudge.Mobile/ProductJudge.Mobile.csproj'    
   - name: AppVersionMinorPrepared
