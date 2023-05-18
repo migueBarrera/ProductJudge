@@ -80,7 +80,7 @@ jobs:
       command: 'publish'
       publishWebProjects: false
       projects: '$(csproj)'
-      arguments: '-c $(buildConfiguration) -f net7.0-android /p:AndroidKeyStore=true /p:ApplicationDisplayVersion=$(ApplicationDisplayVersion).$(AppVersionBuild) /p:ApplicationVersion=$(ApplicationVersion)$(AppVersionBuild) /p:AndroidSigningKeyStore=$(keystore-file-name) /p:AndroidSigningStorePass=$(androidKeyStorePass) /p:AndroidSigningKeyAlias=$(androidKeyStoreAlias) /p:AndroidSigningKeyPass=$(androidKeyStoreAliasPass)'
+      arguments: '-c $(buildConfiguration) -f net7.0-android /p:AndroidKeyStore=true /p:ApplicationDisplayVersion=$(ApplicationDisplayVersion).$(AppVersionBuild) /p:ApplicationVersion=$(ApplicationVersion)$(AppVersionBuild) /p:AndroidSigningKeyStore=$(keystore.secureFilePath) /p:AndroidSigningStorePass=$(androidKeyStorePass) /p:AndroidSigningKeyAlias=$(androidKeyStoreAlias) /p:AndroidSigningKeyPass=$(androidKeyStoreAliasPass)'
 
   - task: CopyFiles@2
     inputs:
