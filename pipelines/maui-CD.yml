@@ -28,19 +28,14 @@ variables:
     value: Release
   - name: csproj
     value: 'src/ProductJudge.Mobile/ProductJudge.Mobile/ProductJudge.Mobile.csproj'    
-  - name: AppVersionMinorPrepared
-    ${{ if ge(parameters.AppVersionMinor, 10) }}:
-      value: ${{ format('{0}',parameters.AppVersionMinor) }}
-    ${{ else }}:
-      value: ${{ format('0{0}',parameters.AppVersionMinor) }}
   - name: MayorAndMinorPrepared
-    value: ${{ format('{0}{1}',parameters.AppVersionMayor, variables.AppVersionMinorPrepared) }}
+    value: ${{ format('{0}{1}',parameters.AppVersionMayor, parameters.AppVersionMinor) }}
   - name: AppVersionBuild
     value: $[counter(variables.MayorAndMinorPrepared, 1)]  
   - name: ApplicationDisplayVersion
     value: ${{ format('{0}.{1}', parameters.AppVersionMayor, parameters.AppVersionMinor ) }}
   - name: ApplicationVersion
-    value: ${{ format('{0}{1}', parameters.AppVersionMayor, variables.AppVersionMinorPrepared ) }}
+    value: ${{ format('{0}{1}', parameters.AppVersionMayor, variables.AppVersionMinor ) }}
 jobs:
 - job: 'Android_Bundle'
   steps:
