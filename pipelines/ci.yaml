@@ -16,8 +16,7 @@ steps:
   displayName: 'Execute Ktlint, Run Unit Tests and Build'
   continueOnError: false
   inputs:
-    gradleWrapperFile: 'gradlew'
-    workingDirectory: '$(Build.SourcesDirectory)/src/ProductJudge.Mobile'
+    gradleWrapperFile: 'src/ProductJudge.Mobile/gradlew'
     tasks: 'ktlintCheck testReleaseUnitTest assembleRelease'
     publishJUnitResults: true
     testResultsFiles: '**/TEST-*.xml'
