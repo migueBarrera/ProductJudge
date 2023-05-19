@@ -1,0 +1,11 @@
+// VERSIONING
+
+ext {
+    defaultVersionCode = 1
+    defaultVersionName = '1.0'
+    CalculatedVersionCode = project.hasProperty('versionCode') ? versionCode.toInteger() : defaultVersionCode
+    CalculatedVersionName = project.hasProperty('versionName') ? versionName : defaultVersionName
+}
+
+println "VersionCode is set to $CalculatedVersionCode"
+println "VersionName is set to $CalculatedVersionName"

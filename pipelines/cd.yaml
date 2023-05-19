@@ -1,0 +1,90 @@
+trigger: 
+  - none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+parameters:
+- name: AppVersionMayor
+  displayName: App Version (ej. 1)
+  default: 1
+  type: string
+- name: AppVersionMinor
+  displayName: Build App Version (ej. 0)
+  default: 0
+  type: string
+
+workspace:
+  clean: all
+
+variables:
+  - group: androidsecrets
+  - name: JDK-VERSION
+    value: '1.11'
+  - name: APP_VERSION_MAYOR
+    value: ${{ parameters.AppVersionMayor}}
+  - name: APP_VERSION_MENOR
+    value: ${{ parameters.AppVersionMinor}}
+  - name: APP_VERSION_BUILD
+    value: $[counter(${{ parameters.VersionMayor}}${{ parameters.VersionMenor}}, 0)]   
+  - name: APP_VERSION_CODE
+    value: $[counter(1, 1)]
+
+steps:
+- pwsh: |
+    $AppVersionNumericSeparatedByDots = "$Env:APP_VERSION_MAYOR.$Env:APP_VERSION_MENOR.$Env:APP_VERSION_BUILD"
+    $AppVersionNumericSeparatedByDotsPlusVersionCode = "Build $Env:APP_VERSION_CODE  Version $Env:APP_VERSION_MAYOR.$Env:APP_VERSION_MENOR.$Env:APP_VERSION_BUILD "
+    # Set output variables
+    Write-Host "App version -> $AppVersionNumericSeparatedByDots, setting output variable 'appversion'"
+    Write-Host "##vso[task.setvariable variable=appversion;isOutput=true]$AppVersionNumericSeparatedByDots"
+    # Update build name
+    Write-Host "##vso[build.updatebuildnumber]$AppVersionNumericSeparatedByDotsPlusVersionCode"
+  name: GetAppVersion
+  displayName: 'Get app version and set BuildName'
+
+- task: Gradle@2
+  displayName: 'Build'
+  inputs:
+    workingDirectory: '$(Build.SourcesDirectory)/src/ProductJudge.Mobile'
+    gradleWrapperFile: 'src/gradlew'
+    tasks: 'bundleRelease assembleRelease -PversionCode=$(APP_VERSION_CODE) -PversionName=$(GetAppVersion.appversion) --full-stacktrace'
+    jdkVersionOption: '$(JDK-VERSION)'
+    jdkArchitectureOption: 'x64'
+    publishJUnitResults: false
+
+- task: DownloadSecureFile@1
+  displayName: 'Download keystore'
+  name: keystore
+  inputs:
+    secureFile: '$(keystore-file-name)'
+- task: CmdLine@2
+  displayName: 'Sign bundle'
+  inputs:
+    script: 'jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore $(keystore.secureFilePath) -storepass $(androidKeyStorePass) -keypass $(androidKeyStoreAliasPass) $(Build.SourcesDirectory)/ProductJudge.Mobile/src/app/build/outputs/bundle/release/*.aab $(androidKeyStoreAlias)'
+- task: AndroidSigning@3
+  displayName: 'Sign and zipalign APK'
+  inputs:
+    apkFiles: '**/*.apk'
+    apksign: true
+    zipalign: false
+    apksignerKeystoreFile: $(keystore-file-name)
+    apksignerKeystorePassword: $(keystore-password)
+    apksignerKeystoreAlias: $(keystore-key)
+    apksignerKeyPassword: $(keystore-key-password)
+    apksignerArguments: --out $(build.artifactStagingDirectory)/productjudge.Signed.apk
+
+- task: CopyFiles@2
+  displayName: 'Move APK and AAB to artifacts directory'
+  inputs:
+    sourceFolder: '$(Build.Repository.LocalPath)'
+    Contents: |
+      **/*.Signed.apk
+      **/*.aab
+    flattenFolders: true
+    targetFolder: '$(build.artifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish build artifact'
+  inputs:
+    ArtifactName: 'Android_Dist_Package'
+    publishLocation: 'Container'

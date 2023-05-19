@@ -1,0 +1,25 @@
+trigger: 
+  - none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+workspace:
+  clean: all
+
+variables:
+  - name: JDK-VERSION
+    value: '1.11'
+
+steps:
+- task: Gradle@2
+  displayName: 'Execute Ktlint, Run Unit Tests and Build'
+  continueOnError: false
+  inputs:
+    gradleWrapperFile: 'src/gradlew'
+    workingDirectory: '$(Build.SourcesDirectory)/src/ProductJudge.Mobile'
+    tasks: 'ktlintCheck testReleaseUnitTest assembleRelease'
+    publishJUnitResults: true
+    testResultsFiles: '**/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '$(JDK-VERSION)'
