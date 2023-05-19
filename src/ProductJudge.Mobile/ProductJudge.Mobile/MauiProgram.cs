@@ -18,6 +18,7 @@ using Plugin.Firebase.Bundled.Shared;
 //using Playground.Platforms.Android.Services.UserInteraction;
 //#endif
 //using Plugin.Firebase.Storage;
+using ProductJudge.Mobile.Features;
 
 namespace ProductJudge.Mobile;
 
