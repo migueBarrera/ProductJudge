@@ -46,7 +46,7 @@ steps:
   displayName: 'Build'
   inputs:
     workingDirectory: '$(Build.SourcesDirectory)/src/ProductJudge.Mobile'
-    gradleWrapperFile: 'src/gradlew'
+    gradleWrapperFile: 'src/ProductJudge.Mobile/gradlew'
     tasks: 'bundleRelease assembleRelease -PversionCode=$(APP_VERSION_CODE) -PversionName=$(GetAppVersion.appversion) --full-stacktrace'
     jdkVersionOption: '$(JDK-VERSION)'
     jdkArchitectureOption: 'x64'
