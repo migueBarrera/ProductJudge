@@ -37,7 +37,7 @@ variables:
   - name: ApplicationVersion
     value: ${{ format('{0}{1}', parameters.AppVersionMayor, variables.AppVersionMinor ) }}
   - name: BuildNumber
-    value: $[counter(variables.MayorAndMinorPrepared, 11)] 
+    value: $[counter(0, 11)] 
 jobs:
 - job: 'Android_Bundle'
   steps:
