@@ -36,11 +36,13 @@ variables:
     value: ${{ format('{0}.{1}', parameters.AppVersionMayor, parameters.AppVersionMinor ) }}
   - name: ApplicationVersion
     value: ${{ format('{0}{1}', parameters.AppVersionMayor, variables.AppVersionMinor ) }}
+  - name: BuildNumber
+    value: $[counter(variables.MayorAndMinorPrepared, 11)] 
 jobs:
 - job: 'Android_Bundle'
   steps:
   - pwsh: |
-       Write-Host "##vso[build.updatebuildnumber]$(ApplicationDisplayVersion).$(AppVersionBuild)"
+       Write-Host "##vso[build.updatebuildnumber]$(ApplicationDisplayVersion).$(AppVersionBuild) - $(BuildNumber)"
     name: SetBuildName
     displayName: 'set BuildName'
   - task: UseDotNet@2
@@ -65,7 +67,7 @@ jobs:
       command: 'publish'
       publishWebProjects: false
       projects: '$(csproj)'
-      arguments: '-c $(buildConfiguration) -f net7.0-android /p:AndroidKeyStore=true /p:ApplicationDisplayVersion=$(ApplicationDisplayVersion).$(AppVersionBuild) /p:ApplicationVersion=$(ApplicationVersion)$(AppVersionBuild) /p:AndroidSigningKeyStore=$(keystore.secureFilePath) /p:AndroidSigningStorePass=$(androidKeyStorePass) /p:AndroidSigningKeyAlias=$(androidKeyStoreAlias) /p:AndroidSigningKeyPass=$(androidKeyStoreAliasPass)'
+      arguments: '-c $(buildConfiguration) -f net7.0-android /p:AndroidKeyStore=true /p:ApplicationDisplayVersion=$(ApplicationDisplayVersion).$(AppVersionBuild) /p:ApplicationVersion=$(BuildNumber) /p:AndroidSigningKeyStore=$(keystore.secureFilePath) /p:AndroidSigningStorePass=$(androidKeyStorePass) /p:AndroidSigningKeyAlias=$(androidKeyStoreAlias) /p:AndroidSigningKeyPass=$(androidKeyStoreAliasPass)'
 
   - task: CopyFiles@2
     inputs:
