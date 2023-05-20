@@ -60,7 +60,7 @@ steps:
 - task: CmdLine@2
   displayName: 'Sign bundle'
   inputs:
-    script: 'jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore $(keystore.secureFilePath) -storepass $(androidKeyStorePass) -keypass $(androidKeyStoreAliasPass) $(Build.SourcesDirectory)/src/ProductJudge.Mobile/app/build/outputs/bundle/release/*.aab $(androidKeyStoreAlias)'
+    script: 'jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 -keystore $(keystore.secureFilePath) -storepass "$(androidKeyStorePass)" -keypass "$(androidKeyStoreAliasPass)" $(Build.SourcesDirectory)/src/ProductJudge.Mobile/app/build/outputs/bundle/release/*.aab $(androidKeyStoreAlias)'
 - task: AndroidSigning@3
   displayName: 'Sign and zipalign APK'
   inputs:
