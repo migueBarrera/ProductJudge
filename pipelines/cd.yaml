@@ -67,10 +67,10 @@ steps:
     apkFiles: '**/*.apk'
     apksign: true
     zipalign: false
-    apksignerKeystoreFile: $(keystore-file-name)
-    apksignerKeystorePassword: $(keystore-password)
-    apksignerKeystoreAlias: $(keystore-key)
-    apksignerKeyPassword: $(keystore-key-password)
+    apksignerKeystoreFile: $(keystore.secureFilePath)
+    apksignerKeystorePassword: $(androidKeyStorePass)
+    apksignerKeystoreAlias: $(androidKeyStoreAlias)
+    apksignerKeyPassword: $(androidKeyStoreAliasPass)
     apksignerArguments: --out $(build.artifactStagingDirectory)/productjudge.Signed.apk
 
 - task: CopyFiles@2
