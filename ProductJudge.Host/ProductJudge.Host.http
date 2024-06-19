@@ -1,0 +1,6 @@
+@ProductJudge.Host_HostAddress = http://localhost:5260
+
+GET {{ProductJudge.Host_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
