@@ -21,7 +21,7 @@ public class WeatherForecastShould
         _client = app.CreateClient();  
 
 
-        var myvalue = new WeatherForecast();
+        var myvalue = new WeatherForecast();   
     }
 
     [Fact]
