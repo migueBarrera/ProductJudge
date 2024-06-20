@@ -19,6 +19,9 @@ public class WeatherForecastShould
     {
         var app = new CustomTestServer();
         _client = app.CreateClient();  
+
+
+        var myvalue = new WeatherForecast();
     }
 
     [Fact]
