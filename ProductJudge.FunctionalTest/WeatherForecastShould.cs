@@ -17,6 +17,7 @@ public class WeatherForecastShould
 
     public WeatherForecastShould()
     {
+        //Resuelvo fix
         var app = new CustomTestServer();
         _client = app.CreateClient();  
 
