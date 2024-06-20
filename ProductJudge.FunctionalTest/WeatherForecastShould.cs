@@ -33,4 +33,9 @@ public class WeatherForecastShould
 
         var result = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>();
     }
+
+    public void Test()
+    {
+
+    }
 }
