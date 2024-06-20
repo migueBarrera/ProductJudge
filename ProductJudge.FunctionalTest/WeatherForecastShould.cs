@@ -32,6 +32,8 @@ public class WeatherForecastShould
         Assert.Equal(HttpStatusCode.OK, response.StatusCode);
 
         var result = await response.Content.ReadFromJsonAsync<List<WeatherForecast>>();
+
+        //Comentario que resuelve un fix
     }
 
     public void Test()
