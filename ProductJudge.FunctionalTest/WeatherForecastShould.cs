@@ -22,6 +22,10 @@ public class WeatherForecastShould
 
 
         var myvalue = new WeatherForecast();
+
+
+
+
     }
 
     [Fact]
